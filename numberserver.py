@@ -1,5 +1,5 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
-import SocketServer
+import socket
 
 class NumberServer(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -30,10 +30,12 @@ class NumberServer(BaseHTTPRequestHandler):
 
     def do_HEAD(self):
         self._set_headers()
+
+class HTTPServerV6(HTTPServer):
+  address_family = socket.AF_INET6        
         
-        
-def run(server_class=HTTPServer, handler_class=NumberServer, port=80):
-    server_address = ('', port)
+def run(server_class=HTTPServerV6, handler_class=NumberServer, port=80):
+    server_address = ('::', port)
     httpd = server_class(server_address, handler_class)
     print 'Starting number server...'
     httpd.serve_forever()
